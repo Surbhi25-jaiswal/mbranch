@@ -1,19 +1,24 @@
-pipeline {
-   agent any
-   stages {
-       stage('Build Code') {
-           steps {
-               bat """
-               echo "Building Artifact"
-               """
-           }
-       }
-      stage('Deploy Code') {
-          steps {
-               bat """
-               echo "Deploying Code"
-               """
-          }
-      }
-   }
+pipeline { 
+    agent any 
+    options {
+        skipStagesAfterUnstable()
+    }
+    stages {
+        stage('Build') { 
+            steps { 
+                sh 'make' 
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'make check'
+                junit 'reports/**/*.xml' 
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make publish'
+            }
+        }
+    }
 }
