@@ -1,28 +1,16 @@
-pipeline { 
-  
-   agent any
-
-   stages {
-   
-     stage('Install Dependencies') { 
-        steps { 
-           bat 'npm install' 
+ steps {
+                echo 'Test App'
+            }
         }
-     }
-     
-     stage('Test') { 
-        steps { 
-           bat 'echo "testing application..."'
+        stage('Deploy') {
+            steps {
+                echo 'Deploy App'
+            }
         }
-      }
-
-         stage("Deploy application") { 
-         steps { 
-           bat 'echo "deploying application..."'
-         }
-
-     }
-  
-   	}
-
-   }
+    }
+    post {
+        always {
+            emailext body: 'summary', subject: 'pipeline status', to: 'surbhijaiswal013@gmail.com'
+        }
+    }
+}
